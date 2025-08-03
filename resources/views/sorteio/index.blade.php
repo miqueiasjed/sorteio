@@ -143,6 +143,16 @@
                 height: 50px;
                 font-size: 12px;
             }
+
+            .card {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+
+            .form-input {
+                font-size: 16px;
+                padding: 10px 14px;
+            }
         }
     </style>
 </head>
@@ -273,7 +283,7 @@
             <div class="space-y-4">
                 <div class="bg-green-50 border border-green-200 rounded-lg p-4">
                     <h4 class="font-bold text-green-800 mb-2">📱 Chave PIX:</h4>
-                    <p class="text-green-700 font-mono text-lg">miqueiasdesenvolvedor@gmail.com</p>
+                    <p class="text-green-700 font-mono text-sm md:text-lg break-all">miqueiasdesenvolvedor@gmail.com</p>
                 </div>
 
                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -281,7 +291,7 @@
                     <p class="text-blue-700 mb-3">Após o pagamento, envie o comprovante para:</p>
                     <a href="https://wa.me/5585994181234?text=Olá! Vim do site do sorteio. Aqui está meu comprovante de pagamento:"
                        target="_blank"
-                       class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                       class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-3 py-2 md:px-4 rounded-lg transition-colors text-sm md:text-base">
                         📱 WhatsApp: (85) 99418-1234
                     </a>
                 </div>
