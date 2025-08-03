@@ -154,6 +154,9 @@
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">🎁 Sorteio Rede Artesanal</h1>
                     <p class="text-gray-600 mt-2">Reserve seus números da sorte! Números de 1 a 200 disponíveis.</p>
+                    <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p class="text-blue-800 font-medium">🏗️ Em prol da construção das Salas de Aulas da Igreja Ad Maraponga 2</p>
+                    </div>
                 </div>
                 <div class="flex gap-2">
 
@@ -258,6 +261,32 @@
                 >
                 </button>
             </form>
+        </div>
+
+        <!-- Informações de Pagamento -->
+        <div class="card">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">💳 Informações de Pagamento</h3>
+            <div class="space-y-4">
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h4 class="font-bold text-green-800 mb-2">📱 Chave PIX:</h4>
+                    <p class="text-green-700 font-mono text-lg">miqueiasdesenvolvedor@gmail.com</p>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 class="font-bold text-blue-800 mb-2">📞 Enviar Comprovante:</h4>
+                    <p class="text-blue-700 mb-3">Após o pagamento, envie o comprovante para:</p>
+                    <a href="https://wa.me/5585994181234?text=Olá! Vim do site do sorteio. Aqui está meu comprovante de pagamento:"
+                       target="_blank"
+                       class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        📱 WhatsApp: (85) 99418-1234
+                    </a>
+                </div>
+
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <h4 class="font-bold text-yellow-800 mb-2">🎯 Condição do Sorteio:</h4>
+                    <p class="text-yellow-700">O sorteio acontecerá quando houver no mínimo <strong>100 números vendidos</strong>.</p>
+                </div>
+            </div>
         </div>
 
         <!-- Legenda -->
