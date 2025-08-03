@@ -24,7 +24,7 @@ class SorteioController extends Controller
             'phone' => 'required|string|max:20',
         ]);
 
-        $selectedNumbers = $request->numbers;
+        $selectedNumbers = array_map('intval', $request->numbers);
         $name = $request->name;
         $phone = $request->phone;
 
@@ -85,25 +85,58 @@ class SorteioController extends Controller
     }
 
     // Nova função para área administrativa
-    public function admin()
+    public function admin(Request $request)
     {
-        $reservedNumbers = Number::where('status', '!=', 'disponivel')
-            ->orderBy('number')
-            ->get();
+        // Verificar se já está autenticado
+        if ($request->session()->has('admin_authenticated')) {
+            $reservedNumbers = Number::where('status', '!=', 'disponivel')
+                ->orderBy('number')
+                ->get();
 
-        $stats = [
-            'total' => Number::count(),
-            'disponivel' => Number::where('status', 'disponivel')->count(),
-            'reservado' => Number::where('status', 'reservado')->count(),
-            'pago' => Number::where('status', 'pago')->count(),
-        ];
+            $stats = [
+                'total' => Number::count(),
+                'disponivel' => Number::where('status', 'disponivel')->count(),
+                'reservado' => Number::where('status', 'reservado')->count(),
+                'pago' => Number::where('status', 'pago')->count(),
+            ];
 
-        return view('sorteio.admin', compact('reservedNumbers', 'stats'));
+            return view('sorteio.admin', compact('reservedNumbers', 'stats'));
+        }
+
+        // Se não está autenticado, mostrar página de login
+        return view('sorteio.admin-login');
+    }
+
+    // Função para autenticar admin
+    public function adminLogin(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string'
+        ]);
+
+        if ($request->password === 'fic201301') {
+            $request->session()->put('admin_authenticated', true);
+            return redirect()->route('sorteio.admin');
+        }
+
+        return back()->withErrors(['password' => 'Senha incorreta.']);
+    }
+
+    // Função para logout
+    public function adminLogout(Request $request)
+    {
+        $request->session()->forget('admin_authenticated');
+        return redirect()->route('sorteio.index');
     }
 
     // Função para atualizar status via admin
     public function adminUpdateStatus(Request $request)
     {
+        // Verificar autenticação
+        if (!$request->session()->has('admin_authenticated')) {
+            return redirect()->route('sorteio.admin');
+        }
+
         $request->validate([
             'number' => 'required|integer|min:1|max:200',
             'status' => 'required|in:disponivel,reservado,pago'
@@ -124,6 +157,11 @@ class SorteioController extends Controller
     // Função para limpar reserva (devolver para disponível)
     public function clearReservation(Request $request)
     {
+        // Verificar autenticação
+        if (!$request->session()->has('admin_authenticated')) {
+            return redirect()->route('sorteio.admin');
+        }
+
         $request->validate([
             'number' => 'required|integer|min:1|max:200'
         ]);

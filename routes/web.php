@@ -10,5 +10,7 @@ Route::get('/api/numbers', [SorteioController::class, 'getNumbers'])->name('sort
 
 // Rotas administrativas
 Route::get('/admin', [SorteioController::class, 'admin'])->name('sorteio.admin');
+Route::post('/admin/login', [SorteioController::class, 'adminLogin'])->name('sorteio.admin-login');
+Route::get('/admin/logout', [SorteioController::class, 'adminLogout'])->name('sorteio.admin-logout');
 Route::post('/admin/update-status', [SorteioController::class, 'adminUpdateStatus'])->name('sorteio.admin-update-status');
 Route::post('/admin/clear-reservation', [SorteioController::class, 'clearReservation'])->name('sorteio.clear-reservation');

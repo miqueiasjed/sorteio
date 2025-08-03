@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorteio Rede Artesanal - Reserve seu número</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         .number-grid {
             display: grid;
@@ -145,7 +146,7 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-50 min-h-screen" x-data="sorteioApp()">
     <!-- Header -->
     <div class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -155,9 +156,7 @@
                     <p class="text-gray-600 mt-2">Reserve seus números da sorte! Números de 1 a 200 disponíveis.</p>
                 </div>
                 <div class="flex gap-2">
-                    <a href="{{ route('sorteio.admin') }}" class="btn-secondary" style="background-color: #6b7280;">
-                        🔧 Admin
-                    </a>
+
                     <button onclick="location.reload()" class="btn-secondary">
                         🔄 Atualizar
                     </button>
@@ -191,8 +190,12 @@
                     <button
                         class="{{ $buttonClass }}"
                         @if(!$isReserved)
-                            onclick="toggleNumber({{ $number->number }})"
+                            @click="toggleNumber({{ $number->number }})"
                         @endif
+                        :class="{
+                            'number-selected': selectedNumbers.includes({{ $number->number }}),
+                            'number-available': !selectedNumbers.includes({{ $number->number }}) && '{{ $status }}' === 'disponivel'
+                        }"
                         data-number="{{ $number->number }}"
                         data-status="{{ $status }}"
                     >
@@ -207,7 +210,7 @@
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Seus dados</h2>
             <p class="text-gray-600 mb-6">Preencha seus dados para reservar os números selecionados</p>
 
-            <form action="{{ route('sorteio.reserve') }}" method="POST" id="reserveForm">
+            <form action="{{ route('sorteio.reserve') }}" method="POST" x-ref="reserveForm">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
@@ -219,6 +222,7 @@
                             class="form-input"
                             placeholder="Digite seu nome completo"
                             required
+                            x-model="formData.name"
                         >
                     </div>
 
@@ -231,24 +235,27 @@
                             class="form-input"
                             placeholder="(11) 99999-9999"
                             required
+                            x-model="formData.phone"
                         >
                     </div>
                 </div>
 
                 <div class="bg-gray-50 rounded-lg p-4 mb-6">
                     <strong class="text-gray-900">Números selecionados:</strong>
-                    <span id="selectedNumbers" class="text-gray-600">Nenhum</span>
+                    <span x-text="selectedNumbers.length > 0 ? selectedNumbers.sort((a,b) => a-b).join(', ') : 'Nenhum'"></span>
                 </div>
 
-                <input type="hidden" name="numbers[]" id="numbersInput">
+                <!-- Inputs hidden para os números selecionados -->
+                <template x-for="number in selectedNumbers" :key="number">
+                    <input type="hidden" name="numbers[]" :value="number">
+                </template>
 
                 <button
                     type="submit"
-                    id="reserveButton"
                     class="btn-primary"
-                    disabled
+                    :disabled="selectedNumbers.length === 0 || !formData.name || !formData.phone"
+                    x-text="selectedNumbers.length > 0 && formData.name && formData.phone ? `Reservar ${selectedNumbers.length} número(s)` : 'Reservar números'"
                 >
-                    Reservar números
                 </button>
             </form>
         </div>
@@ -278,63 +285,23 @@
     </div>
 
     <script>
-        let selectedNumbers = [];
+        function sorteioApp() {
+            return {
+                selectedNumbers: [],
+                formData: {
+                    name: '',
+                    phone: ''
+                },
 
-        function toggleNumber(number) {
-            const button = document.querySelector(`[data-number="${number}"]`);
-            const status = button.getAttribute('data-status');
-
-            if (status !== 'disponivel') return;
-
-            if (selectedNumbers.includes(number)) {
-                selectedNumbers = selectedNumbers.filter(n => n !== number);
-                button.classList.remove('number-selected');
-                button.classList.add('number-available');
-            } else {
-                selectedNumbers.push(number);
-                button.classList.remove('number-available');
-                button.classList.add('number-selected');
-            }
-
-            updateSelectedNumbers();
-            updateReserveButton();
-        }
-
-        function updateSelectedNumbers() {
-            const span = document.getElementById('selectedNumbers');
-            const input = document.getElementById('numbersInput');
-
-            if (selectedNumbers.length === 0) {
-                span.textContent = 'Nenhum';
-                input.value = '';
-            } else {
-                span.textContent = selectedNumbers.sort((a, b) => a - b).join(', ');
-                // Criar múltiplos inputs para cada número
-                input.innerHTML = '';
-                selectedNumbers.forEach(number => {
-                    const hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'numbers[]';
-                    hiddenInput.value = number;
-                    input.appendChild(hiddenInput);
-                });
+                toggleNumber(number) {
+                    if (this.selectedNumbers.includes(number)) {
+                        this.selectedNumbers = this.selectedNumbers.filter(n => n !== number);
+                    } else {
+                        this.selectedNumbers.push(number);
+                    }
+                }
             }
         }
-
-        function updateReserveButton() {
-            const button = document.getElementById('reserveButton');
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-
-            const isValid = selectedNumbers.length > 0 && name.trim() && phone.trim();
-
-            button.disabled = !isValid;
-            button.textContent = isValid ? `Reservar ${selectedNumbers.length} número(s)` : 'Reservar números';
-        }
-
-        // Atualizar botão quando os campos mudarem
-        document.getElementById('name').addEventListener('input', updateReserveButton);
-        document.getElementById('phone').addEventListener('input', updateReserveButton);
 
         // Mostrar mensagens de sucesso/erro
         @if(session('success'))

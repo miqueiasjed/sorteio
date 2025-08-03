@@ -148,6 +148,9 @@
                     <a href="{{ route('sorteio.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                         📱 Ver Site
                     </a>
+                    <a href="{{ route('sorteio.admin-logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        🚪 Sair
+                    </a>
                     <button onclick="location.reload()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                         🔄 Atualizar
                     </button>
