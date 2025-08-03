@@ -157,6 +157,10 @@
                     <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                         <p class="text-blue-800 font-medium">🏗️ Em prol da construção das Salas de Aulas da Igreja Ad Maraponga 2</p>
                     </div>
+                    <div class="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                        <p class="text-purple-800 font-medium">🎯 Prêmio: Rede Brim Sol a Sol Bordada - Varanda de Crochê</p>
+                        <p class="text-purple-700 text-sm">Valor do Ponto: R$ 10,00</p>
+                    </div>
                 </div>
                 <div class="flex gap-2">
 
@@ -285,6 +289,7 @@
                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                     <h4 class="font-bold text-yellow-800 mb-2">🎯 Condição do Sorteio:</h4>
                     <p class="text-yellow-700">O sorteio acontecerá quando houver no mínimo <strong>100 números vendidos</strong>.</p>
+                    <p class="text-yellow-700 mt-2"><strong>Valor por número: R$ 10,00</strong></p>
                 </div>
             </div>
         </div>
