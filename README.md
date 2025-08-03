@@ -1,114 +1,135 @@
-# Sorteio Rede Artesanal
+# 🎁 Sorteio Rede Artesanal
 
-Sistema completo de sorteio online com números de 1 a 200, integrado ao Google Sheets para gerenciamento de reservas e pagamentos.
+Aplicação web moderna para reserva de números de sorteio, desenvolvida com Laravel, Blade e Tailwind CSS.
 
-## 🎯 Funcionalidades
+## 🚀 Tecnologias
 
-- **Interface intuitiva**: Seleção visual de números com cores indicativas
-- **Integração Google Sheets**: Dados salvos automaticamente na planilha
-- **Gerenciamento de status**: Controle de números reservados e pagos
-- **Atualização em tempo real**: Sincronização automática a cada 30 segundos
-- **Design responsivo**: Funciona em desktop e mobile
+- **Backend**: Laravel 12
+- **Frontend**: Blade + Tailwind CSS
+- **Banco de Dados**: SQLite
+- **Interface**: Responsiva e moderna
 
-## 🎨 Status dos Números
+## 📁 Estrutura do Projeto
 
-- **Cinza**: Disponível para reserva
-- **Azul**: Selecionado pelo usuário atual
-- **Amarelo**: Reservado (aguardando pagamento)
-- **Verde**: Pago (confirmado)
-
-## 🔧 Tecnologias Utilizadas
-
-### Frontend
-- React 18
-- Tailwind CSS
-- shadcn/ui components
-- Lucide React icons
-- Vite
-
-### Backend
-- Flask (Python)
-- Google Sheets API
-- Google OAuth2
-
-## 📋 Como Usar
-
-### Para Participantes
-
-1. Acesse o link da aplicação
-2. Clique nos números desejados (aparecem em azul)
-3. Preencha seu nome completo e telefone
-4. Clique em "Reservar números"
-5. Aguarde a confirmação
-
-### Para Administradores
-
-1. Acesse a planilha do Google Sheets
-2. Visualize todas as reservas com dados dos participantes
-3. Altere o status de "reservado" para "pago" quando receber o pagamento
-4. Os números pagos aparecerão em verde na aplicação
-
-## 🔗 Links Importantes
-
-- **Aplicação**: https://5000-irn601oo6omca7xtbnqtl-d6096d8b.manusvm.computer
-- **Planilha Google Sheets**: https://docs.google.com/spreadsheets/d/1twQGhsOuGw7yMGTgOgJShmC3GwPHrsX-0b_ImTCc3Yk/edit
-
-## 📊 Estrutura da Planilha
-
-A planilha possui as seguintes colunas:
-- **Coluna A**: Número sorteado (1-200)
-- **Coluna B**: Nome completo do participante
-- **Coluna C**: Telefone/WhatsApp
-- **Coluna D**: Status (reservado/pago)
-
-## 🚀 Instalação Local
-
-```bash
-# Clone o repositório
-git clone [url-do-repositorio]
-
-# Instale as dependências do frontend
-cd sorteio-rede-artesanal
-npm install
-
-# Configure o ambiente Python
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Configure as credenciais do Google Sheets
-# Coloque o arquivo client_secret.json na raiz do projeto
-
-# Execute o frontend (desenvolvimento)
-npm run dev
-
-# Execute o backend
-python app.py
+```
+sorteio/
+├── app/Models/Number.php
+├── app/Http/Controllers/SorteioController.php
+├── resources/views/sorteio/index.blade.php
+├── routes/web.php
+├── database/migrations/
+├── database/seeders/
+└── database/database.sqlite
 ```
 
-## 🔐 Configuração do Google Sheets
+## ⚡ Início Rápido
 
-1. Crie um projeto no Google Cloud Console
-2. Ative as APIs do Google Sheets e Google Drive
-3. Crie uma conta de serviço e baixe o arquivo JSON
-4. Compartilhe a planilha com o email da conta de serviço
-5. Renomeie o arquivo para `client_secret.json`
+### 1. Executar o projeto
+```bash
+./start.sh
+```
 
-## 💡 Dicas Adicionais
+### 2. Acessar a aplicação
+- **URL**: http://localhost:8000
 
-- **Backup**: A planilha do Google Sheets serve como backup automático
-- **Controle**: Você pode editar diretamente na planilha para fazer ajustes
-- **Relatórios**: Use as funcionalidades do Google Sheets para gerar relatórios
-- **Notificações**: Configure notificações na planilha para ser alertado sobre novas reservas
+## 🔧 Funcionalidades
 
-## 📱 Responsividade
+| Funcionalidade | Descrição |
+|----------------|-----------|
+| Seleção de números | Interface visual para escolher números de 1 a 200 |
+| Reserva | Sistema de reserva com nome e telefone |
+| Status | Controle de status (disponível, reservado, pago) |
+| Validação | Validação de dados no backend |
+| Interface responsiva | Funciona em desktop e mobile |
 
-A aplicação foi desenvolvida para funcionar perfeitamente em:
-- Computadores desktop
-- Tablets
-- Smartphones
+## 📊 Banco de Dados
 
-## 🎉 Pronto para Usar!
+### Tabela `numbers`
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `id` | integer | ID único |
+| `number` | integer | Número do sorteio (1-200) |
+| `name` | string | Nome do reservador |
+| `phone` | string | Telefone do reservador |
+| `status` | enum | Status (disponivel/reservado/pago) |
+| `created_at` | timestamp | Data de criação |
+| `updated_at` | timestamp | Data de atualização |
 
-O sistema está completamente funcional e pronto para seu sorteio. Basta compartilhar o link da aplicação com os participantes e acompanhar as reservas pela planilha do Google Sheets.
+## 🎨 Interface
 
+- **Design**: Moderno e limpo com Tailwind CSS
+- **Cores**: 
+  - Cinza: Disponível
+  - Azul: Selecionado
+  - Amarelo: Reservado
+  - Verde: Pago
+- **Responsivo**: Adapta-se a diferentes tamanhos de tela
+- **Animações**: Efeitos suaves de hover e seleção
+
+## 🛠️ Desenvolvimento
+
+### Backend
+```bash
+composer install
+php artisan serve
+```
+
+### Frontend (desenvolvimento)
+```bash
+npm run dev
+```
+
+### Banco de dados
+```bash
+php artisan migrate:fresh --seed
+```
+
+## 🚀 Deploy
+
+### Produção
+```bash
+composer install --optimize-autoloader --no-dev
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+npm run build
+```
+
+### Variáveis de Ambiente
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://seudominio.com
+DB_CONNECTION=sqlite
+```
+
+## 📝 Logs
+
+Os logs estão disponíveis em:
+- `storage/logs/laravel.log`
+
+## 🔄 Migração
+
+Este projeto foi migrado de uma arquitetura complexa (Flask + React + Google Sheets) para uma solução mais simples e eficiente (Laravel + Blade + SQLite). Veja o [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) para detalhes.
+
+## ✨ Vantagens da Nova Arquitetura
+
+1. **Simplicidade**: Sem dependências externas (Google Sheets)
+2. **Performance**: Banco de dados local é mais rápido
+3. **Manutenibilidade**: Código mais limpo e organizado
+4. **Escalabilidade**: Fácil de expandir funcionalidades
+5. **Segurança**: Dados controlados localmente
+6. **Custo**: Sem custos de APIs externas
+7. **Visual**: Interface moderna e responsiva
+
+## 📞 Suporte
+
+Para dúvidas ou problemas, verifique:
+1. Logs do Laravel (`storage/logs/laravel.log`)
+2. Configuração do banco de dados
+3. Permissões de arquivos
+4. Dependências instaladas
+
+---
+
+**Desenvolvido com ❤️ para Rede Artesanal**

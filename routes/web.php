@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SorteioController;
+
+Route::get('/', [SorteioController::class, 'index'])->name('sorteio.index');
+Route::post('/reserve', [SorteioController::class, 'reserve'])->name('sorteio.reserve');
+Route::post('/update-status', [SorteioController::class, 'updateStatus'])->name('sorteio.update-status');
+Route::get('/api/numbers', [SorteioController::class, 'getNumbers'])->name('sorteio.get-numbers');
