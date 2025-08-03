@@ -13,7 +13,7 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .number-button {
             width: 60px;
             height: 60px;
@@ -26,38 +26,38 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .number-available {
             background-color: #f9fafb;
             color: #374151;
         }
-        
+
         .number-available:hover {
             background-color: #e5e7eb;
             transform: scale(1.05);
         }
-        
+
         .number-selected {
             background-color: #3b82f6;
             color: white;
             border-color: #3b82f6;
             transform: scale(1.05);
         }
-        
+
         .number-reserved {
             background-color: #fbbf24;
             color: #1f2937;
             border-color: #fbbf24;
             cursor: not-allowed;
         }
-        
+
         .number-paid {
             background-color: #10b981;
             color: white;
             border-color: #10b981;
             cursor: not-allowed;
         }
-        
+
         .form-input {
             width: 100%;
             padding: 12px 16px;
@@ -66,13 +66,13 @@
             font-size: 16px;
             transition: border-color 0.2s ease;
         }
-        
+
         .form-input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        
+
         .btn-primary {
             background-color: #3b82f6;
             color: white;
@@ -85,16 +85,16 @@
             transition: background-color 0.2s ease;
             width: 100%;
         }
-        
+
         .btn-primary:hover:not(:disabled) {
             background-color: #2563eb;
         }
-        
+
         .btn-primary:disabled {
             background-color: #9ca3af;
             cursor: not-allowed;
         }
-        
+
         .btn-secondary {
             background-color: #10b981;
             color: white;
@@ -105,11 +105,11 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
-        
+
         .btn-secondary:hover {
             background-color: #059669;
         }
-        
+
         .card {
             background: white;
             border-radius: 12px;
@@ -117,26 +117,26 @@
             padding: 24px;
             margin-bottom: 24px;
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .legend-color {
             width: 24px;
             height: 24px;
             border-radius: 4px;
             border: 2px solid #d1d5db;
         }
-        
+
         @media (max-width: 768px) {
             .number-grid {
                 grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
                 gap: 6px;
             }
-            
+
             .number-button {
                 width: 50px;
                 height: 50px;
@@ -154,9 +154,14 @@
                     <h1 class="text-3xl font-bold text-gray-900">🎁 Sorteio Rede Artesanal</h1>
                     <p class="text-gray-600 mt-2">Reserve seus números da sorte! Números de 1 a 200 disponíveis.</p>
                 </div>
-                <button onclick="location.reload()" class="btn-secondary">
-                    🔄 Atualizar
-                </button>
+                <div class="flex gap-2">
+                    <a href="{{ route('sorteio.admin') }}" class="btn-secondary" style="background-color: #6b7280;">
+                        🔧 Admin
+                    </a>
+                    <button onclick="location.reload()" class="btn-secondary">
+                        🔄 Atualizar
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -166,14 +171,14 @@
         <div class="card">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Escolha seus números</h2>
             <p class="text-gray-600 mb-6">Clique nos números para selecioná-los. Números em verde já foram pagos, em amarelo estão reservados.</p>
-            
+
             <div class="number-grid">
                 @foreach($numbers as $number)
                     @php
                         $status = $number->status;
                         $isReserved = $status !== 'disponivel';
                         $buttonClass = 'number-button ';
-                        
+
                         if ($status === 'pago') {
                             $buttonClass .= 'number-paid';
                         } elseif ($status === 'reservado') {
@@ -182,8 +187,8 @@
                             $buttonClass .= 'number-available';
                         }
                     @endphp
-                    
-                    <button 
+
+                    <button
                         class="{{ $buttonClass }}"
                         @if(!$isReserved)
                             onclick="toggleNumber({{ $number->number }})"
@@ -201,44 +206,44 @@
         <div class="card">
             <h2 class="text-2xl font-bold text-gray-900 mb-4">Seus dados</h2>
             <p class="text-gray-600 mb-6">Preencha seus dados para reservar os números selecionados</p>
-            
+
             <form action="{{ route('sorteio.reserve') }}" method="POST" id="reserveForm">
                 @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nome completo</label>
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
                             class="form-input"
                             placeholder="Digite seu nome completo"
                             required
                         >
                     </div>
-                    
+
                     <div>
                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Telefone/WhatsApp</label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
                             class="form-input"
                             placeholder="(11) 99999-9999"
                             required
                         >
                     </div>
                 </div>
-                
+
                 <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                    <strong class="text-gray-900">Números selecionados:</strong> 
+                    <strong class="text-gray-900">Números selecionados:</strong>
                     <span id="selectedNumbers" class="text-gray-600">Nenhum</span>
                 </div>
-                
-                <input type="hidden" name="numbers" id="numbersInput">
-                
-                <button 
-                    type="submit" 
+
+                <input type="hidden" name="numbers[]" id="numbersInput">
+
+                <button
+                    type="submit"
                     id="reserveButton"
                     class="btn-primary"
                     disabled
@@ -274,13 +279,13 @@
 
     <script>
         let selectedNumbers = [];
-        
+
         function toggleNumber(number) {
             const button = document.querySelector(`[data-number="${number}"]`);
             const status = button.getAttribute('data-status');
-            
+
             if (status !== 'disponivel') return;
-            
+
             if (selectedNumbers.includes(number)) {
                 selectedNumbers = selectedNumbers.filter(n => n !== number);
                 button.classList.remove('number-selected');
@@ -290,44 +295,52 @@
                 button.classList.remove('number-available');
                 button.classList.add('number-selected');
             }
-            
+
             updateSelectedNumbers();
             updateReserveButton();
         }
-        
+
         function updateSelectedNumbers() {
             const span = document.getElementById('selectedNumbers');
             const input = document.getElementById('numbersInput');
-            
+
             if (selectedNumbers.length === 0) {
                 span.textContent = 'Nenhum';
                 input.value = '';
             } else {
                 span.textContent = selectedNumbers.sort((a, b) => a - b).join(', ');
-                input.value = JSON.stringify(selectedNumbers);
+                // Criar múltiplos inputs para cada número
+                input.innerHTML = '';
+                selectedNumbers.forEach(number => {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'numbers[]';
+                    hiddenInput.value = number;
+                    input.appendChild(hiddenInput);
+                });
             }
         }
-        
+
         function updateReserveButton() {
             const button = document.getElementById('reserveButton');
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
-            
+
             const isValid = selectedNumbers.length > 0 && name.trim() && phone.trim();
-            
+
             button.disabled = !isValid;
             button.textContent = isValid ? `Reservar ${selectedNumbers.length} número(s)` : 'Reservar números';
         }
-        
+
         // Atualizar botão quando os campos mudarem
         document.getElementById('name').addEventListener('input', updateReserveButton);
         document.getElementById('phone').addEventListener('input', updateReserveButton);
-        
+
         // Mostrar mensagens de sucesso/erro
         @if(session('success'))
             alert('{{ session('success') }}');
         @endif
-        
+
         @if($errors->any())
             alert('{{ $errors->first() }}');
         @endif

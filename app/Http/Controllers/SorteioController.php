@@ -83,4 +83,63 @@ class SorteioController extends Controller
 
         return response()->json(['reservedNumbers' => $reservedNumbers]);
     }
+
+    // Nova função para área administrativa
+    public function admin()
+    {
+        $reservedNumbers = Number::where('status', '!=', 'disponivel')
+            ->orderBy('number')
+            ->get();
+
+        $stats = [
+            'total' => Number::count(),
+            'disponivel' => Number::where('status', 'disponivel')->count(),
+            'reservado' => Number::where('status', 'reservado')->count(),
+            'pago' => Number::where('status', 'pago')->count(),
+        ];
+
+        return view('sorteio.admin', compact('reservedNumbers', 'stats'));
+    }
+
+    // Função para atualizar status via admin
+    public function adminUpdateStatus(Request $request)
+    {
+        $request->validate([
+            'number' => 'required|integer|min:1|max:200',
+            'status' => 'required|in:disponivel,reservado,pago'
+        ]);
+
+        $number = Number::where('number', $request->number)->first();
+
+        if (!$number) {
+            return back()->withErrors(['number' => 'Número não encontrado.']);
+        }
+
+        $oldStatus = $number->status;
+        $number->update(['status' => $request->status]);
+
+        return back()->with('success', "Status do número {$number->number} alterado de '{$oldStatus}' para '{$request->status}'");
+    }
+
+    // Função para limpar reserva (devolver para disponível)
+    public function clearReservation(Request $request)
+    {
+        $request->validate([
+            'number' => 'required|integer|min:1|max:200'
+        ]);
+
+        $number = Number::where('number', $request->number)->first();
+
+        if (!$number) {
+            return back()->withErrors(['number' => 'Número não encontrado.']);
+        }
+
+        $number->update([
+            'name' => null,
+            'phone' => null,
+            'status' => 'disponivel'
+        ]);
+
+        return back()->with('success', "Reserva do número {$number->number} foi cancelada");
+    }
 }
